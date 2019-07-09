@@ -35,7 +35,6 @@ $("#submit").on("click", function (event) {
 });
 
 database.ref().on("child_added", function (snapshot) {
-    $("#trainsDisplay").empty();
     var tableRow = $("<tr>");
     tableRow.append(
         "<td>" + snapshot.val().train + "</td><td>"
