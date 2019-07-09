@@ -12,6 +12,8 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
+var nextArrival = "23:00";
+var minutesAway = 23;
 
 console.log(database);
 
@@ -30,4 +32,15 @@ $("#submit").on("click", function (event) {
         firstTrainTime: firstTrainTime,
         frequency: frequency
     });
+});
+
+database.ref().on("child_added", function (snapshot) {
+    $("#trainsDisplay").empty();
+    var tableRow = $("<tr>");
+    tableRow.append(
+        "<td>" + snapshot.val().train + "</td><td>"
+        + snapshot.val().destination + "</td><td>"
+        + snapshot.val().frequency + "</td><td>"
+        + nextArrival + "</td><td>" + minutesAway + "</td>");
+    $("#trainsDisplay").append(tableRow);
 });
