@@ -9,3 +9,25 @@ var firebaseConfig = {
     appId: "1:682902303998:web:25b12ad9c31dc2dc"
 };
 // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var database = firebase.database();
+
+console.log(database);
+
+
+$("#submit").on("click", function (event) {
+    event.preventDefault();
+    console.log("form submitted");
+    var train = $("#trainName").val().trim();
+    var destination = $("#destination").val().trim();
+    var firstTrainTime = $("#firstTrainTime").val().trim();
+    var frequency = $("#frequency").val().trim();
+
+    database.ref().push({
+        train: train,
+        destination: destination,
+        firstTrainTime: firstTrainTime,
+        frequency: frequency
+    });
+});
