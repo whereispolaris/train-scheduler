@@ -11,13 +11,20 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// SETUP VARIALBLES
+//========================
 var database = firebase.database();
-var nextArrival = "23:00";
-var minutesAway = 23;
-
-console.log(database);
+var nextArrival // = "23:00";
+var minutesAway // = 23;
 
 
+// FUNCTIONS
+//========================
+
+
+
+// EVENT FUNCTIONS
+//========================
 $("#submit").on("click", function (event) {
     event.preventDefault();
     console.log("form submitted");
@@ -43,3 +50,4 @@ database.ref().on("child_added", function (snapshot) {
         + nextArrival + "</td><td>" + minutesAway + "</td>");
     $("#trainsDisplay").append(tableRow);
 });
+
