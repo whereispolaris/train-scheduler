@@ -14,18 +14,33 @@ firebase.initializeApp(firebaseConfig);
 // SETUP VARIALBLES
 //========================
 var database = firebase.database();
-var nextArrival;
-var minutesAway;
+
 // FUNCTIONS
 //========================
 
+// Function to get Next Arrival Time based on first train and frequency
+function nextArrivalTime(firstTime, tFrequency) {
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    var tRemainder = diffTime % tFrequency;
+    var tMinutesTillTrain = tFrequency - tRemainder;
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    return moment(nextTrain).format("hh:mm");
+}
 
+// Function to get  minutes to train arrival based first train and frequency
+function nextArrivalMinutes(firstTime, tFrequency) {
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    var tRemainder = diffTime % tFrequency;
+    var tMinutesTillTrain = tFrequency - tRemainder;
+    return tMinutesTillTrain;
+}
 
 // EVENT FUNCTIONS
 //========================
 $("#submit").on("click", function (event) {
     event.preventDefault();
-    console.log("form submitted");
     var train = $("#trainName").val().trim();
     var destination = $("#destination").val().trim();
     var firstTrainTime = $("#firstTrainTime").val().trim();
@@ -42,22 +57,25 @@ $("#submit").on("click", function (event) {
 database.ref().on("child_added", function (snapshot) {
     console.log();
 
-    //Values from Firebase database
+    // Values from Firebase database
     var trainDB = snapshot.val().train;
     var destinationDB = snapshot.val().destination;
     var firstTimeDB = snapshot.val().firstTrainTime;
     var frequencyDB = snapshot.val().frequency;
 
-    console.log("Name: " + trainDB + " ,First Time: " + firstTimeDB + ", Frequency: " + frequencyDB);
-
-
-
+    // Generate table data
     var tableRow = $("<tr>");
     tableRow.append(
-        "<td>" + trainDB + "</td><td>"
+        "<td>"
+        + trainDB + "</td><td>"
         + destinationDB + "</td><td>"
         + frequencyDB + "</td><td>"
-        + nextArrival + "</td><td>" + minutesAway + "</td>");
+        // Run function to get next arrival time
+        + nextArrivalTime(firstTimeDB, frequencyDB)
+        // Run function to get minutes to arrival
+        + "</td><td>" + nextArrivalMinutes(firstTimeDB, frequencyDB)
+        + "</td>");
+    // Append table data to table
     $("#trainsDisplay").append(tableRow);
 });
 
