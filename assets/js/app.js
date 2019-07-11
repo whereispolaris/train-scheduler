@@ -16,7 +16,6 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 var nextArrival;
 var minutesAway;
-
 // FUNCTIONS
 //========================
 
@@ -41,11 +40,23 @@ $("#submit").on("click", function (event) {
 });
 
 database.ref().on("child_added", function (snapshot) {
+    console.log();
+
+    //Values from Firebase database
+    var trainDB = snapshot.val().train;
+    var destinationDB = snapshot.val().destination;
+    var firstTimeDB = snapshot.val().firstTrainTime;
+    var frequencyDB = snapshot.val().frequency;
+
+    console.log("Name: " + trainDB + " ,First Time: " + firstTimeDB + ", Frequency: " + frequencyDB);
+
+
+
     var tableRow = $("<tr>");
     tableRow.append(
-        "<td>" + snapshot.val().train + "</td><td>"
-        + snapshot.val().destination + "</td><td>"
-        + snapshot.val().frequency + "</td><td>"
+        "<td>" + trainDB + "</td><td>"
+        + destinationDB + "</td><td>"
+        + frequencyDB + "</td><td>"
         + nextArrival + "</td><td>" + minutesAway + "</td>");
     $("#trainsDisplay").append(tableRow);
 });
