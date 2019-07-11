@@ -14,9 +14,8 @@ firebase.initializeApp(firebaseConfig);
 // SETUP VARIALBLES
 //========================
 var database = firebase.database();
-var nextArrival // = "23:00";
-var minutesAway // = 23;
-
+var nextArrival;
+var minutesAway;
 
 // FUNCTIONS
 //========================
